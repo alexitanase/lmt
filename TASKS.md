@@ -155,24 +155,24 @@ Convención por paso:
 
 ### FASE 0 — Bootstrap del proyecto
 
-- [ ] **0.1 Inicializar `package.json`**
+- [x] **0.1 Inicializar `package.json`**
   - Objetivo: paquete `@lmt/tracker`, scripts `dev`, `build`, `mock`, `test`, `lint`.
   - Archivos: `package.json`.
-  - Aceptación: `npm install` instala sin errores.
+  - Aceptación: `npm install` instala sin errores. ✅
 
-- [ ] **0.2 Configurar TypeScript + Vite + Preact**
+- [x] **0.2 Configurar TypeScript + Vite + Preact**
   - Objetivo: build de demo arranca con `npm run dev`.
   - Archivos: `tsconfig.json`, `vite.config.ts`, `src/index.ts` (stub).
-  - Aceptación: `npm run dev` abre `examples/playground.html` con un "Hello LMT".
+  - Aceptación: `npm run dev` abre `examples/playground.html` con un "Hello LMT". ✅
 
-- [ ] **0.3 ESLint + Prettier + EditorConfig**
+- [x] **0.3 ESLint + Prettier + EditorConfig**
   - Archivos: `.eslintrc.cjs`, `.prettierrc`, `.editorconfig`.
-  - Aceptación: `npm run lint` pasa en limpio.
+  - Aceptación: `npm run lint` pasa en limpio. ✅
 
-- [ ] **0.4 Vitest + un test verde**
-  - Aceptación: `npm test` pasa.
+- [x] **0.4 Vitest + un test verde**
+  - Aceptación: `npm test` pasa. ✅
 
-- [ ] **0.5 `PROGRESS.md` inicial + commit "chore: bootstrap"**
+- [x] **0.5 `PROGRESS.md` inicial + commit "chore: bootstrap"** ✅
 
 ### FASE 1 — Núcleo de conectividad y API pública
 

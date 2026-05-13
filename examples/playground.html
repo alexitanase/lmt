@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LMT — Playground</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #0b1220;
+        color: #e5e7eb;
+      }
+      header {
+        padding: 12px 16px;
+        background: #111827;
+        border-bottom: 1px solid #1f2937;
+      }
+      main {
+        padding: 24px;
+      }
+      #lmt-container {
+        width: 100%;
+        max-width: 480px;
+        min-height: 300px;
+        margin: 0 auto;
+        background: #0f172a;
+        border: 1px dashed #334155;
+        border-radius: 8px;
+      }
+      code {
+        color: #facc15;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>LMT Playground</strong> — Vite dev server con HMR.
+    </header>
+    <main>
+      <p>Contenedor del tracker (stub Fase 0). En la <code>Fase 1</code> se
+        conectará al WebSocket y se renderizará el partido.</p>
+      <div id="lmt-container"></div>
+    </main>
+
+    <script type="module">
+      import { LMT } from '/src/index.ts';
+      console.log('LMT version:', LMT.VERSION);
+      const instance = LMT.create({
+        container: '#lmt-container',
+        partner: 'demo-feedh',
+      });
+      // Stub por ahora: deja huella en el contenedor para verificar el flujo.
+      const el = document.querySelector('#lmt-container');
+      if (el) {
+        el.textContent = `LMT v${LMT.VERSION} listo (stub). Esperando Fase 1.`;
+      }
+      window.__lmt = instance;
+    </script>
+  </body>
+</html>

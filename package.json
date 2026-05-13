@@ -1,0 +1,46 @@
+{
+  "name": "@lmt/tracker",
+  "version": "0.0.1",
+  "description": "Embeddable Live Match Tracker (SVG + Socket.IO) with white-label support.",
+  "type": "module",
+  "main": "./dist/lmt.cjs.js",
+  "module": "./dist/lmt.esm.js",
+  "browser": "./dist/lmt.umd.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"tests/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"{src,tests,examples,tools}/**/*.{ts,tsx,js,json,html,css,md}\"",
+    "typecheck": "tsc --noEmit",
+    "mock": "tsx tools/mock-ws/server.ts"
+  },
+  "dependencies": {
+    "preact": "^10.22.0",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.8.2",
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.2.5",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10",
+    "vitest": "^1.5.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
