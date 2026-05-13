@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LMT — Dev Dashboard</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #0b1220;
+        color: #e5e7eb;
+        font-family: system-ui, sans-serif;
+      }
+      header {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 18px;
+        background: #111827;
+        border-bottom: 1px solid #1f2937;
+      }
+      header h1 { font-size: 16px; margin: 0; }
+      header small { color: #94a3b8; }
+      main {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 420px;
+        gap: 16px;
+        padding: 16px;
+        align-items: start;
+      }
+      @media (max-width: 1024px) { main { grid-template-columns: 1fr; } }
+      #lmt-container {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      }
+      aside { display: flex; flex-direction: column; gap: 12px; }
+      .card {
+        background: #111827;
+        border: 1px solid #1f2937;
+        border-radius: 8px;
+        padding: 12px 14px;
+      }
+      .card h2 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #94a3b8;
+        margin: 0 0 8px;
+      }
+      .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+      input, select, button {
+        background: #1f2937; color: #e5e7eb; border: 1px solid #334155;
+        border-radius: 4px; padding: 6px 9px; font: inherit; font-size: 12px;
+      }
+      button { cursor: pointer; }
+      button:hover { background: #334155; }
+      button[disabled] { opacity: 0.5; cursor: not-allowed; }
+      .pill {
+        display: inline-block; padding: 2px 8px; border-radius: 999px;
+        background: #1f2937; color: #facc15; font-size: 11px;
+        margin-left: auto;
+      }
+      .pill[data-state="ready"] { color: #10b981; }
+      .pill[data-state="error"], .pill[data-state="disconnected"] { color: #ef4444; }
+      .log {
+        max-height: 280px; overflow: auto; background: #0f172a;
+        padding: 8px; border-radius: 6px; font-family: ui-monospace, monospace;
+        font-size: 11px;
+      }
+      .log-line { padding: 2px 0; border-bottom: 1px solid #1f2937; }
+      .log-line .ts { color: #64748b; margin-right: 6px; }
+      .log-line .label { color: #facc15; margin-right: 6px; }
+      code { color: #facc15; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LMT Dev Dashboard</h1>
+      <small id="ver"></small>
+      <span class="pill" id="state-pill">idle</span>
+    </header>
+
+    <main>
+      <section id="lmt-container"></section>
+
+      <aside>
+        <div class="card">
+          <h2>Source</h2>
+          <div class="row">
+            <select id="source">
+              <option value="mock-ws" selected>
+                Mock WS server (ws://localhost:4545)
+              </option>
+              <option value="fake">In-page fake socket</option>
+            </select>
+            <button id="reconnect" title="re-create LMT with current source">↻</button>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <label>EventId</label>
+            <input id="event-id" value="123456" style="width:110px" />
+            <button id="load">loadEvent</button>
+          </div>
+          <p style="color:#94a3b8;font-size:11px;margin:8px 0 0">
+            Mock streams an auto-running soccer match. Manual buttons below
+            only apply to the in-page fake socket.
+          </p>
+        </div>
+
+        <div class="card" id="manual-actions">
+          <h2>Manual actions (fake only)</h2>
+          <div class="row">
+            <button data-act="possession-home">poss HOME</button>
+            <button data-act="possession-away">poss AWAY</button>
+            <button data-act="attack-home">attack HOME</button>
+            <button data-act="danger-attack-away">danger AWAY</button>
+            <button data-act="corner-home">corner HOME</button>
+            <button data-act="shot-on-target-home">shot ON HOME</button>
+          </div>
+          <div class="row" style="margin-top:6px">
+            <button data-act="goal-home">GOAL HOME</button>
+            <button data-act="yellow-card-away">yellow AWAY</button>
+            <button data-act="red-card-home">red HOME</button>
+            <button data-act="penalty-away">penalty AWAY</button>
+            <button data-act="halftime">halftime</button>
+            <button data-act="fulltime">fulltime</button>
+            <button data-act="var">VAR</button>
+            <button data-act="match-ended">match-ended</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Brand</h2>
+          <div class="row">
+            <select id="brand">
+              <option value="default">default</option>
+              <option value="goal99" selected>Goal99 (verde/amarillo)</option>
+              <option value="crimson">Crimson</option>
+              <option value="ocean">Ocean</option>
+              <option value="amber">Amber</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Live WS log</h2>
+          <div class="log" id="log"></div>
+        </div>
+      </aside>
+    </main>
+
+    <script type="module">
+      import { LMT } from '/src/index.ts';
+
+      function makeFakeSocket() {
+        const handlers = new Map();
+        const s = {
+          connected: false,
+          on(e, cb) { (handlers.get(e) ?? handlers.set(e, new Set()).get(e)).add(cb); return s; },
+          off(e, cb) { handlers.get(e)?.delete(cb); return s; },
+          emit() { return s; },
+          disconnect() { s.connected = false; return s; },
+          trigger(e, p) {
+            if (e === 'connect') s.connected = true;
+            handlers.get(e)?.forEach((cb) => cb(p));
+          },
+        };
+        return s;
+      }
+
+      const $ver = document.getElementById('ver');
+      const $state = document.getElementById('state-pill');
+      const $log = document.getElementById('log');
+      const $source = document.getElementById('source');
+      const $brand = document.getElementById('brand');
+      const $manual = document.getElementById('manual-actions');
+      $ver.textContent = `v${LMT.VERSION}`;
+
+      const themes = {
+        default: {},
+        goal99:  { brandName: 'Goal99',   primaryColor: '#10b981', accentColor: '#facc15' },
+        crimson: { brandName: 'Crimson',  primaryColor: '#dc2626', accentColor: '#fbbf24',
+                   bgColor: '#1c0d0d', homeColor: '#fde68a', awayColor: '#7f1d1d' },
+        ocean:   { brandName: 'Ocean',    primaryColor: '#0ea5e9', accentColor: '#67e8f9',
+                   bgColor: '#0c1a2b',   homeColor: '#67e8f9', awayColor: '#fb7185' },
+        amber:   { brandName: 'Amber',    primaryColor: '#f97316', accentColor: '#fde68a',
+                   bgColor: '#1c1108' },
+      };
+
+      const log = (label, data) => {
+        const ts = new Date().toLocaleTimeString();
+        const line = document.createElement('div');
+        line.className = 'log-line';
+        line.innerHTML = `<span class="ts">${ts}</span><span class="label">${label}</span>` +
+          (data ? `<span>${JSON.stringify(data).slice(0, 200)}</span>` : '');
+        $log.prepend(line);
+        if ($log.children.length > 200) $log.lastChild?.remove();
+      };
+
+      let lmt = null;
+      let fake = null;
+
+      function rebuild() {
+        if (lmt) { try { lmt.destroy(); } catch (_) {} lmt = null; }
+        $log.innerHTML = '';
+        const source = $source.value;
+        const theme = themes[$brand.value] ?? {};
+
+        const config = {
+          container: '#lmt-container',
+          partner: 'demo-feedh',
+          theme,
+        };
+
+        if (source === 'fake') {
+          fake = makeFakeSocket();
+          config.socketFactory = () => fake;
+          $manual.style.opacity = '1';
+          $manual.querySelectorAll('button').forEach((b) => (b.disabled = false));
+        } else {
+          fake = null;
+          config.endpoint = 'http://localhost:4545';
+          $manual.style.opacity = '0.5';
+          $manual.querySelectorAll('button').forEach((b) => (b.disabled = true));
+        }
+
+        lmt = LMT.create(config);
+        lmt.on('connection', ({ state, reason }) => {
+          $state.textContent = state;
+          $state.dataset.state = state;
+          log('connection', { state, reason });
+        });
+        lmt.on('event:loaded', (e) => log('event:loaded', { en: e.en, es: e.es, si: e.si }));
+        lmt.on('event:updated', (e) => log('event:updated', { en: e.en }));
+        lmt.on('action', (a) =>
+          log('action', { Action: a.Action, Team: a.Team, Player: a.Player, BallPosition: a.BallPosition }),
+        );
+        lmt.on('ready', (e) => log('ready', e));
+        lmt.on('error', (e) => log('error', e));
+
+        const id = document.getElementById('event-id').value.trim() || '123456';
+        lmt.loadEvent(id);
+        if (source === 'fake') {
+          fake.trigger('connect');
+          fake.trigger('verified', { message: 'ok' });
+          fake.trigger('constructor', {
+            message: {
+              id: 123456, en: 'Guimaraes - Rio Ave', es: 1, si: 1, sn: 'Soccer',
+              cgn: 'Primeira Liga', cn: 'Portugal',
+              th: { id: 1, name: 'Guimaraes' }, ta: { id: 2, name: 'Rio Ave' },
+              esc: '1:0', ecp: 2,
+              ests: {
+                CORNER: { name: 'CORNER', home: 4, away: 2 },
+                POSSESSION: { name: 'POSSESSION', home: '62', away: '38' },
+                SHOT_ON_TARGET: { name: 'SHOT_ON_TARGET', home: 6, away: 3 },
+                YELLOW_CARD: { name: 'YELLOW_CARD', home: 2, away: 3 },
+                ATTACKS: { name: 'ATTACKS', home: 45, away: 30 },
+                DANGER_ATTACKS: { name: 'DANGER_ATTACKS', home: 18, away: 12 },
+              },
+            },
+          });
+        }
+        window.__lmt = lmt;
+        log('lmt created', { source, partner: 'demo-feedh', theme: $brand.value });
+      }
+
+      // Wire controls
+      $source.addEventListener('change', rebuild);
+      $brand.addEventListener('change', () => {
+        const theme = themes[$brand.value] ?? {};
+        lmt?.setTheme(theme);
+        log('setTheme', theme);
+      });
+      document.getElementById('reconnect').onclick = rebuild;
+      document.getElementById('load').onclick = () => {
+        const id = document.getElementById('event-id').value.trim() || '123456';
+        lmt?.loadEvent(id);
+      };
+
+      function ballFor(action, team) {
+        if (action === 'corner') return [team === 'away' ? 0.98 : 0.02, Math.random() > 0.5 ? 0.04 : 0.96];
+        if (action === 'goal-kick') return [team === 'away' ? 0.95 : 0.05, 0.5];
+        const baseX = team === 'home' ? 0.1 + Math.random() * 0.6 : 0.3 + Math.random() * 0.6;
+        return [baseX, 0.2 + Math.random() * 0.6];
+      }
+      let secs = 2700;
+      $manual.querySelectorAll('[data-act]').forEach((b) => {
+        b.onclick = () => {
+          if (!fake) return;
+          const parts = b.dataset.act.split('-');
+          const last = parts.at(-1);
+          const isSide = last === 'home' || last === 'away';
+          const team = isSide ? last : 'home';
+          const action = isSide ? parts.slice(0, -1).join('-') : parts.join('-');
+          secs += 7;
+          fake.trigger('update_event', {
+            message: {
+              Action: action,
+              Team: team,
+              Player: team === 'home' ? 'C Silva' : 'Aderllan',
+              BallPosition: ballFor(action, team),
+              Seconds: secs,
+              ServerTime: Date.now(),
+            },
+          });
+        };
+      });
+
+      rebuild();
+    </script>
+  </body>
+</html>

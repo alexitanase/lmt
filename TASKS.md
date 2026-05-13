@@ -226,12 +226,21 @@ Convención por paso:
 
 ### FASE 4 — Mock server + dashboard de pruebas
 
-- [ ] **4.1 `tools/mock-ws/server.ts`**
-  - Socket.IO local que reproduce el flujo del PDF con un partido scriptado.
-- [ ] **4.2 `examples/dashboard.html`**
-  - Tracker + panel: log WS + botones para emitir cualquier acción + selector de marca/deporte/EventId.
-- [ ] **4.3 Documentar `npm run mock` y `npm run dev`**
-  - Aceptación: con `npm run dev` + `npm run mock` se ven animaciones en vivo sin endpoint real.
+- [x] **4.1 `tools/mock-ws/server.ts`** ✅
+  - Socket.IO server local en puerto 4545 (PORT overridable). Maneja
+    verify_client, client_ready, get_event_details, get_events_list,
+    get_event_h2h. Streamea update_event cada 2s con BallPosition
+    coherente con la acción (corner→esquina, goal-kick→área, etc.).
+  - Verificado e2e con `tools/mock-ws/smoke-client.ts`.
+- [x] **4.2 `examples/dashboard.html`** ✅
+  - Tracker en panel principal + panel lateral con: Source switcher
+    (mock-ws / in-page fake), EventId, 14 botones de acción manual
+    (active sólo en fake), selector de 5 marcas (default / Goal99 /
+    Crimson / Ocean / Amber), log WS en streaming. setTheme reactivo
+    en cambio de marca, rebuild en cambio de source.
+- [x] **4.3 Documentar `npm run mock` + `npm run dev`** ✅
+  - README.md con guía de integración, API, dos-terminales para el
+    dashboard en vivo, layout de carpetas.
 
 ### FASE 5 — Más deportes
 

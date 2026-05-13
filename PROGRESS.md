@@ -38,3 +38,7 @@ Formato: `YYYY-MM-DD — paso X.Y — descripción`.
 - 2026-05-13 — sports/registry.ts: soccer (si=1) registrado. PitchStage.tsx selecciona por si o muestra fallback.
 - 2026-05-13 — tests Fase 3 — projection(5) + actions(3) + soccer(5) + tabs(5) = 18 nuevos. Total 45/45.
 - 2026-05-13 — playground — botones generan BallPosition coherente con la acción y avanza el reloj. UMD 25.95 KB gz.
+- 2026-05-13 — paso 4.1 — tools/mock-ws/server.ts: Socket.IO server con CORS abierto que reproduce verify_client → verified → client_ready → constructor → loop update_event cada 2s (ciclo de 23 acciones con players reales y BallPosition coherente). También responde get_event_details, get_events_list y get_event_h2h.
+- 2026-05-13 — paso 4.1 — tools/mock-ws/smoke-client.ts: cliente de verificación end-to-end (PORT=4546 ACTIONS=2 → ok).
+- 2026-05-13 — paso 4.2 — examples/dashboard.html: dashboard con tracker + panel lateral (Source switcher mock-ws/in-page fake, 14 botones de acción manual, 5 marcas blancas, log WS en streaming). Rebuild en cambio de source, setTheme en cambio de marca.
+- 2026-05-13 — paso 4.3 — README.md con integración (script tag + ESM), API table, instrucciones dual-terminal (npm run mock + npm run dev) y layout de carpetas.
