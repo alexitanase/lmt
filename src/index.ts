@@ -15,8 +15,10 @@ import type {
   LMTPublicEvents,
   ThemeConfig,
 } from './core/types';
+import { VERSION } from './core/version';
+import { mountUI } from './ui/mount';
 
-export const VERSION = '0.1.0';
+export { VERSION };
 
 export interface LMTInstance {
   /** Load (or switch) the event to track. Reuses the verified session. */
@@ -33,7 +35,7 @@ export interface LMTInstance {
     listener: (data: LMTPublicEvents[K]) => void,
   ): void;
 
-  /** Apply a partial theme override at runtime (UI hookup lands in Fase 2). */
+  /** Apply a partial theme override at runtime. Updates CSS vars live. */
   setTheme(theme: ThemeConfig): void;
 
   /** Snapshot of the relevant state for the host. */
@@ -43,7 +45,7 @@ export interface LMTInstance {
     timeline: ActionModel[];
   };
 
-  /** Tear down the socket connection and clear listeners. */
+  /** Tear down the socket, the UI and clear listeners. */
   destroy(): void;
 }
 
@@ -65,12 +67,14 @@ export const LMT = {
     if (!config.partner) throw new Error('LMT: "partner" is required');
     if (!config.container) throw new Error('LMT: "container" is required');
 
-    // Validates container existence eagerly (only when DOM is available).
-    if (typeof document !== 'undefined') {
-      resolveContainer(config.container);
-    }
+    const containerEl =
+      typeof document !== 'undefined' ? resolveContainer(config.container) : null;
 
     const controller = new Controller(config);
+
+    const unmountUI = containerEl
+      ? mountUI(containerEl, controller.store)
+      : () => undefined;
 
     return {
       loadEvent(eventId) {
@@ -94,6 +98,7 @@ export const LMT = {
         };
       },
       destroy() {
+        unmountUI();
         controller.destroy();
       },
     };

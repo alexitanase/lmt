@@ -24,38 +24,42 @@
         padding: 24px;
         display: grid;
         gap: 24px;
-        grid-template-columns: minmax(0, 1fr) 360px;
+        grid-template-columns: minmax(0, 460px) 380px;
+        align-items: start;
       }
+      @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
       #lmt-container {
         width: 100%;
-        min-height: 420px;
-        background: #0f172a;
-        border: 1px dashed #334155;
-        border-radius: 8px;
-        padding: 16px;
-        box-sizing: border-box;
+        min-height: 460px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       }
       aside {
         background: #111827;
         border: 1px solid #1f2937;
         border-radius: 8px;
-        padding: 16px;
-        font-family: ui-monospace, monospace;
-        font-size: 12px;
-        max-height: 70vh;
-        overflow: auto;
+        padding: 14px;
+        font-size: 13px;
       }
-      .row { display: flex; gap: 8px; align-items: center; }
-      input, button {
+      .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; align-items: center; }
+      input, button, select {
         background: #1f2937; color: #e5e7eb; border: 1px solid #334155;
         border-radius: 4px; padding: 6px 10px; font: inherit;
       }
       button { cursor: pointer; }
+      button:hover { background: #334155; }
       .badge {
         display: inline-block; padding: 2px 8px; border-radius: 999px;
         background: #1f2937; color: #facc15; font-size: 12px;
       }
+      h4 { margin: 14px 0 6px; font-size: 13px; color: #cbd5e1; }
       code { color: #facc15; }
+      .log {
+        max-height: 240px; overflow: auto; background: #0f172a;
+        padding: 8px; border-radius: 6px; font-family: ui-monospace, monospace;
+        font-size: 11px;
+      }
       .log-line { padding: 2px 0; border-bottom: 1px solid #1f2937; }
     </style>
   </head>
@@ -64,30 +68,72 @@
       <strong>LMT Playground</strong>
       <span class="badge" id="ver"></span>
       <span class="badge" id="state">idle</span>
-      <span style="margin-left:auto">Vite HMR activo · cambios en <code>src/</code> se reflejan al instante.</span>
+      <span style="margin-left:auto">
+        Vite HMR · cambios en <code>src/</code> reflejados al instante.
+      </span>
     </header>
 
     <main>
       <section>
         <h3 style="margin-top:0">Tracker</h3>
-        <p>Fase 1: núcleo conectividad listo. El renderizado SVG llega en Fase 2/3.</p>
         <div id="lmt-container"></div>
-
-        <div class="row" style="margin-top:12px">
-          <input id="event-id" value="123456" />
-          <button id="load">loadEvent</button>
-          <button id="destroy">destroy</button>
-        </div>
       </section>
 
       <aside>
-        <strong>Log de eventos LMT</strong>
-        <div id="log"></div>
+        <h4>Simulador (Fake Socket)</h4>
+        <div class="row">
+          <input id="event-id" value="123456" style="width:120px" />
+          <button id="load">loadEvent</button>
+          <button id="constructor-btn">Cargar partido demo</button>
+        </div>
+        <div class="row">
+          <button data-act="possession-home">Possession HOME</button>
+          <button data-act="possession-away">Possession AWAY</button>
+          <button data-act="goal-home">Goal HOME</button>
+          <button data-act="corner-away">Corner AWAY</button>
+          <button data-act="yellow-card-home">Yellow HOME</button>
+          <button data-act="halftime">Halftime</button>
+        </div>
+
+        <h4>Theme</h4>
+        <div class="row">
+          <label>brand</label>
+          <select id="brand">
+            <option value="default">default (esmeralda/amarillo)</option>
+            <option value="goal99">Goal99 (verde/amarillo)</option>
+            <option value="crimson">Crimson (rojo/dorado)</option>
+            <option value="ocean">Ocean (azul/cyan)</option>
+          </select>
+        </div>
+
+        <h4>Log de eventos LMT</h4>
+        <div class="log" id="log"></div>
       </aside>
     </main>
 
     <script type="module">
       import { LMT } from '/src/index.ts';
+
+      // ── Fake Socket.IO (mismo contrato que helpers/fakeSocket en tests) ──
+      function makeFakeSocket() {
+        const handlers = new Map();
+        const socket = {
+          connected: false,
+          on(event, cb) {
+            let s = handlers.get(event);
+            if (!s) { s = new Set(); handlers.set(event, s); }
+            s.add(cb); return socket;
+          },
+          off(event, cb) { handlers.get(event)?.delete(cb); return socket; },
+          emit() { return socket; },
+          disconnect() { socket.connected = false; return socket; },
+          trigger(event, payload) {
+            if (event === 'connect') socket.connected = true;
+            handlers.get(event)?.forEach((cb) => cb(payload));
+          },
+        };
+        return socket;
+      }
 
       const $ver = document.getElementById('ver');
       const $state = document.getElementById('state');
@@ -97,16 +143,17 @@
       const log = (label, data) => {
         const line = document.createElement('div');
         line.className = 'log-line';
-        line.textContent = `[${new Date().toLocaleTimeString()}] ${label} ${
-          data ? JSON.stringify(data).slice(0, 120) : ''
-        }`;
+        line.textContent = `[${new Date().toLocaleTimeString()}] ${label}` +
+          (data ? ` ${JSON.stringify(data).slice(0, 140)}` : '');
         $log.prepend(line);
       };
 
-      const lmt = LMT.create({
+      let fake = makeFakeSocket();
+      let lmt = LMT.create({
         container: '#lmt-container',
         partner: 'demo-feedh',
-        theme: { brandName: 'Goal99', primaryColor: '#10b981' },
+        theme: { brandName: 'Goal99', primaryColor: '#10b981', accentColor: '#facc15' },
+        socketFactory: () => fake,
       });
 
       lmt.on('connection', ({ state, reason }) => {
@@ -114,18 +161,64 @@
         log('connection', { state, reason });
       });
       lmt.on('event:loaded', (e) => log('event:loaded', { en: e.en, es: e.es }));
-      lmt.on('event:updated', (e) => log('event:updated', { en: e.en }));
       lmt.on('action', (a) => log('action', { Action: a.Action, Team: a.Team, Player: a.Player }));
-      lmt.on('error', (e) => log('error', e));
       lmt.on('ready', (e) => log('ready', e));
+      lmt.on('error', (e) => log('error', e));
+
+      // Auto-flow simulado
+      function autoFlow() {
+        fake.trigger('connect');
+        fake.trigger('verified', { message: 'ok' });
+      }
 
       document.getElementById('load').onclick = () => {
-        const id = document.getElementById('event-id').value.trim();
-        if (id) lmt.loadEvent(id);
+        const id = document.getElementById('event-id').value.trim() || '1';
+        lmt.loadEvent(id);
+        autoFlow();
       };
-      document.getElementById('destroy').onclick = () => {
-        lmt.destroy();
-        log('destroyed');
+
+      const demoEvent = {
+        id: 123456,
+        en: 'Guimaraes - Rio Ave',
+        es: 1, si: 1,
+        th: { id: 1, name: 'Guimaraes' },
+        ta: { id: 2, name: 'Rio Ave' },
+        esc: '1:0',
+        ecp: 2,
+      };
+
+      document.getElementById('constructor-btn').onclick = () => {
+        lmt.loadEvent('123456');
+        autoFlow();
+        fake.trigger('constructor', { message: demoEvent });
+      };
+
+      document.querySelectorAll('[data-act]').forEach((b) => {
+        b.onclick = () => {
+          const [action, team] = b.dataset.act.split('-team-').length === 2
+            ? b.dataset.act.split('-team-')
+            : (() => {
+                const parts = b.dataset.act.split('-');
+                const last = parts.at(-1);
+                const isSide = last === 'home' || last === 'away';
+                return [parts.slice(0, isSide ? -1 : parts.length).join('-'), isSide ? last : 'home'];
+              })();
+          const msg = { Action: action, Team: team, Player: 'C Silva', Seconds: 4495 };
+          fake.trigger('update_event', { message: msg });
+        };
+      });
+
+      // Themes
+      const themes = {
+        default: {},
+        goal99: { primaryColor: '#10b981', accentColor: '#facc15', bgColor: '#0f172a' },
+        crimson: { primaryColor: '#dc2626', accentColor: '#fbbf24', bgColor: '#1c0d0d', homeColor: '#fde68a', awayColor: '#7f1d1d' },
+        ocean:   { primaryColor: '#0ea5e9', accentColor: '#67e8f9', bgColor: '#0c1a2b', homeColor: '#67e8f9', awayColor: '#fb7185' },
+      };
+      document.getElementById('brand').onchange = (e) => {
+        const t = themes[e.target.value] || {};
+        lmt.setTheme(t);
+        log('setTheme', t);
       };
 
       window.__lmt = lmt;

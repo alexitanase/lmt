@@ -19,3 +19,10 @@ Formato: `YYYY-MM-DD — paso X.Y — descripción`.
 - 2026-05-13 — paso 1.5 — API pública LMT.create con loadEvent/on/off/setTheme/getState/destroy. Validación eager de partner y container.
 - 2026-05-13 — paso 1.6 — 20 tests verdes: store(6) + events(3) + controller(6) + smoke(5). Helper fakeSocket inyectable vía socketFactory.
 - 2026-05-13 — playground — actualizado con badge de estado en vivo, log de eventos en panel lateral y botones loadEvent/destroy. UMD 14.66 KB gz incl. socket.io-client.
+- 2026-05-13 — paso 2.1/2.2 — Shadow DOM + Preact mount + tokens CSS (bg, primary, accent, pitch, home/away, font, radius). src/ui/{styles.ts, theme.ts, mount.tsx}.
+- 2026-05-13 — paso 2.3 — ScoreHeader.tsx: home/away + score parseado de esc + barras de color por equipo.
+- 2026-05-13 — paso 2.4 — TabBar.tsx con 5 pestañas (Stats, Player Stats, Timeline, Lineups, Table) controladas vía store.activeTab.
+- 2026-05-13 — paso 2.5 — StatusFooter.tsx: detecta possession y muestra "<Team> · In Possession" + pill con estado de conexión.
+- 2026-05-13 — paso 2.6 — setTheme reactivo: patchTheme → store notifica → renderShell sincrono → CSS vars actualizadas en el .lmt-root.
+- 2026-05-13 — playground — simulador embebido (FakeSocket inline) con botones para constructor/possession/goal/corner/yellow-card/halftime + selector de marca (default/goal99/crimson/ocean) para probar theming. UMD 21.73 KB gz.
+- 2026-05-13 — tests UI — 7 tests verdes (shadow DOM, 5 tabs, switch tab, score/teams render, In Possession, theme CSS vars setTheme, destroy limpia shadow). Total 27/27.

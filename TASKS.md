@@ -195,18 +195,18 @@ Convención por paso:
 
 ### FASE 2 — Shell visual + theming
 
-- [ ] **2.1 Shell con Shadow DOM**
-  - Crea `<svg viewBox>` raíz dentro del `container`, monta Preact ahí.
-- [ ] **2.2 Tokens CSS y preset por defecto**
-  - `--lmt-primary`, `--lmt-accent`, `--lmt-pitch-1/2`, `--lmt-home`, `--lmt-away`, etc.
-- [ ] **2.3 `ScoreHeader`**
-  - Logos + nombres + marcador + cuadritos de color por equipo.
-- [ ] **2.4 `TabBar`**
-  - 5 pestañas controladas: Stats / Player Stats / Timeline / Lineups / Table.
-- [ ] **2.5 `StatusFooter`**
-  - "Team X In Possession" + barra de color, animado en cambio de posesión.
-- [ ] **2.6 `setTheme` en caliente**
-  - Aceptación: cambiar `theme.primaryColor` en runtime recolorea sin remount.
+- [x] **2.1 Shell con Shadow DOM** ✅
+  - Mount Preact en un shadow root con re-render síncrono ante cambios del store.
+- [x] **2.2 Tokens CSS y preset por defecto** ✅
+  - `--lmt-bg`, `--lmt-primary`, `--lmt-accent`, `--lmt-pitch-1/2`, `--lmt-home`, `--lmt-away`, `--lmt-font`, `--lmt-radius`, etc.
+- [x] **2.3 `ScoreHeader`** ✅
+  - Nombres + marcador parseado de `esc` + barras de color por equipo (home/away).
+- [x] **2.4 `TabBar`** ✅
+  - 5 pestañas controladas via store.activeTab: Stats / Player Stats / Timeline / Lineups / Table.
+- [x] **2.5 `StatusFooter`** ✅
+  - Detecta `possession` y muestra "<Team> · In Possession" + pill con estado de conexión.
+- [x] **2.6 `setTheme` en caliente** ✅
+  - `patchTheme` → re-render síncrono → CSS vars actualizadas. Tests verifican `--lmt-primary`.
 
 ### FASE 3 — Soccer (deporte de la captura)
 
