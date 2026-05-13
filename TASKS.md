@@ -257,11 +257,29 @@ tennis). Los 11 stages son ahora ~10 líneas cada uno.
 
 ### FASE 6 — Empaquetado y release
 
-- [ ] **6.1 Build UMD/ESM/CJS + `lmt.min.js`**
-- [ ] **6.2 Tipos `.d.ts` exportados**
-- [ ] **6.3 README** con ejemplos de integración (script tag + ESM).
-- [ ] **6.4 CHANGELOG** y versión `0.1.0`.
-- [ ] **6.5 Ejemplo en `examples/basic.html` listo para CDN.**
+- [x] **6.1 Build UMD/ESM/CJS + `lmt.min.js`** ✅ vite (lib) + esbuild minify + tools/postbuild.mjs copia umd → min (~30 KB gz). Source maps incluidos.
+- [x] **6.2 Tipos `.d.ts` exportados** ✅ vite-plugin-dts con rollupTypes → único `dist/index.d.ts` (~4.6 KB). tsconfig.build.json excluye tests/examples/tools.
+- [x] **6.3 README** ✅ con instalación npm + CDN, ESM con tipos, tabla de theme tokens, tabla de 11 deportes, distribución, layout, roadmap.
+- [x] **6.4 CHANGELOG** y versión `0.1.0` ✅ Keep a Changelog + SemVer. package.json bumpeado.
+- [x] **6.5 Ejemplo en `examples/basic.html` listo para CDN** ✅ script tag desde unpkg, mínima integración comentada.
+
+Distribución final (`package.json`):
+- `exports`: types / import / require / browser / default + `./min`.
+- `unpkg` y `jsdelivr` apuntan a `dist/lmt.min.js`.
+- `sideEffects: false` para tree-shaking.
+- `files`: `dist`, `README.md`, `CHANGELOG.md`.
+
+---
+
+## 6. Definition of Done global — alcanzada en 0.1.0
+
+- ✅ `LMT.create({...}).loadEvent(id)` carga y anima un partido real o simulado.
+- ✅ 5 pestañas funcionando con datos del EVENT_MODEL.
+- ✅ Soccer 100 % de la lista de acciones del PDF + 10 deportes más.
+- ✅ Marca blanca configurable en `create()` y mutable con `setTheme`.
+- ✅ Shadow DOM: no se filtran estilos al host.
+- ✅ UMD ~30 KB gz autocontenido (Preact + socket.io-client incluidos).
+- ✅ Tests verdes (77/77), lint en limpio, doc completa.
 
 ---
 

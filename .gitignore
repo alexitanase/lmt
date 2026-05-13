@@ -2,6 +2,7 @@ node_modules
 dist
 .cache
 .vite
+.rollup.cache
 coverage
 *.log
 .DS_Store

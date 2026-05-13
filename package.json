@@ -1,19 +1,48 @@
 {
   "name": "@lmt/tracker",
-  "version": "0.0.1",
-  "description": "Embeddable Live Match Tracker (SVG + Socket.IO) with white-label support.",
+  "version": "0.1.0",
+  "description": "Embeddable Live Match Tracker (SVG + Socket.IO 4.x) with white-label theming. 11 sports.",
   "type": "module",
   "main": "./dist/lmt.cjs.js",
   "module": "./dist/lmt.esm.js",
   "browser": "./dist/lmt.umd.js",
+  "unpkg": "./dist/lmt.min.js",
+  "jsdelivr": "./dist/lmt.min.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/lmt.umd.js",
+      "import": "./dist/lmt.esm.js",
+      "require": "./dist/lmt.cjs.js",
+      "default": "./dist/lmt.umd.js"
+    },
+    "./min": "./dist/lmt.min.js",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "live-match-tracker",
+    "lmt",
+    "soccer",
+    "football",
+    "basketball",
+    "tennis",
+    "ice-hockey",
+    "sports",
+    "svg",
+    "socket.io",
+    "white-label",
+    "widget"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node tools/postbuild.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -39,6 +68,7 @@
     "tsx": "^4.7.2",
     "typescript": "^5.4.5",
     "vite": "^5.2.10",
+    "vite-plugin-dts": "^3.9.1",
     "vitest": "^1.5.0"
   },
   "engines": {

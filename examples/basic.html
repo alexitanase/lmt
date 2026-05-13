@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LMT — Basic CDN example</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #0b1220;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 24px;
+      }
+      h1 { font-size: 18px; margin: 0 0 16px; }
+      p { color: #94a3b8; font-size: 13px; margin: 6px 0 18px; }
+      #lmt {
+        max-width: 520px;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      code { color: #facc15; }
+    </style>
+  </head>
+  <body>
+    <h1>Live Match Tracker — basic CDN example</h1>
+    <p>
+      Load the UMD bundle from any CDN (unpkg, jsDelivr, …) and instantiate
+      the tracker in a single <code>&lt;script&gt;</code> tag.
+    </p>
+
+    <div id="lmt"></div>
+
+    <!-- 1) Bundle (UMD, ~30 KB gzipped) -->
+    <script src="https://unpkg.com/@lmt/tracker/dist/lmt.min.js"></script>
+
+    <!-- 2) Initialise -->
+    <script>
+      // Required:
+      //   container: where to mount the tracker (CSS selector or HTMLElement)
+      //   partner:   the partner name supplied by the provider's technical team
+      //              (sent in the verify_client message)
+      //
+      // Optional:
+      //   endpoint:  defaults to the value documented in the provider PDF
+      //   theme:     white-label tokens (CSS custom properties)
+      //
+      // The host site owns its own header / navigation — the LMT renders only
+      // the score header, the 5 tabs, the SVG pitch and the status footer.
+      const lmt = LMT.create({
+        container: '#lmt',
+        partner: 'demo-feedh',
+        theme: {
+          brandName: 'My Brand',
+          primaryColor: '#10b981',
+          accentColor: '#facc15',
+        },
+      });
+
+      lmt.on('ready', () => console.log('LMT ready'));
+      lmt.on('action', (a) => console.log('action:', a));
+
+      // Load (or switch) the event you want to track.
+      lmt.loadEvent('123456');
+
+      // Live recolouring at any moment:
+      // lmt.setTheme({ primaryColor: '#dc2626' });
+      // lmt.destroy();
+    </script>
+  </body>
+</html>

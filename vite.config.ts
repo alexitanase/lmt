@@ -1,9 +1,18 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
+import dts from 'vite-plugin-dts';
 import { resolve } from 'node:path';
 
 export default defineConfig(({ command }) => ({
-  plugins: [preact()],
+  plugins: [
+    preact(),
+    dts({
+      tsconfigPath: resolve(__dirname, 'tsconfig.build.json'),
+      rollupTypes: true,
+      insertTypesEntry: true,
+      include: ['src'],
+    }),
+  ],
   root: command === 'serve' ? '.' : undefined,
   server: {
     port: 5173,
@@ -12,6 +21,7 @@ export default defineConfig(({ command }) => ({
   build: {
     target: 'es2020',
     sourcemap: true,
+    minify: 'esbuild',
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'LMT',

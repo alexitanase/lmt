@@ -58,3 +58,9 @@ Formato: `YYYY-MM-DD — paso X.Y — descripción`.
 - 2026-05-13 — paso 5.6 — Cricket (si=66): oval 1400x1000 con boundary, 30y ring, pitch strip y wickets. 8 acciones (run, four, six, wicket, over-end, innings, match-ended).
 - 2026-05-13 — registry — 11 deportes registrados (Soccer/IceHockey/Basketball/Tennis/Baseball/Volleyball/Rugby/Handball/TableTennis/AmericanFootball/Cricket). dashboard.html con selector completo.
 - 2026-05-13 — tests Fase 5 cierre — sports-extra.test.ts: 21 tests parametrizados (3 por deporte × 7 deportes). Total 77/77. UMD 30.19 KB gz.
+- 2026-05-13 — paso 6.2 — vite-plugin-dts + tsconfig.build.json (excluye tests/examples/tools). rollupTypes:true → dist/index.d.ts unificado (~4.6 KB).
+- 2026-05-13 — paso 6.1 — tools/postbuild.mjs copia lmt.umd.js → lmt.min.js (alias CDN). UMD ~30 KB gz, min idéntico, ESM 37.68 KB gz.
+- 2026-05-13 — package.json — exports map con types/import/require/browser/default + unpkg + jsdelivr + sideEffects:false + keywords. Version 0.1.0.
+- 2026-05-13 — paso 6.4 — CHANGELOG.md con 0.1.0 (Added/Distribution/Tested).
+- 2026-05-13 — paso 6.5 — examples/basic.html: integración mínima CDN-ready con script tag (unpkg/jsdelivr).
+- 2026-05-13 — paso 6.3 — README.md ampliado: instalación npm + CDN, ejemplo ESM con types, tabla de theme tokens, tabla de 11 deportes con conteo de acciones, distribución, layout y roadmap.
