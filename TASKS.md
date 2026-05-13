@@ -244,12 +244,12 @@ Convención por paso:
 
 ### FASE 5 — Más deportes
 
-- [ ] **5.1 Basketball** (pitch + 15 acciones de la doc).
-- [ ] **5.2 Ice Hockey** (pitch + 12 acciones).
-- [ ] **5.3 Tennis** (cancha + 13 acciones, score por sets).
-- [ ] **5.4 Volleyball**.
-- [ ] **5.5 Table Tennis**.
-- [ ] **5.6 Handball / Rugby / Baseball / American Football / Cricket** (mínimo viable, según prioridad acordada).
+- [x] **5.1 Basketball** ✅ Court FIBA-ish (1400×750) con keys, free-throw, arcos 3pt, hoops + 20 acciones (1/2/3-pts, freethrow/scored/missed, foul, quarter-1..4, half-end, overtime, …).
+- [x] **5.2 Ice Hockey** ✅ Rink con esquinas redondeadas (1500×750), red line, blue lines, creases, 4 face-off circles + 16 acciones (faceoff, puck-dropped, icing, powerplay, pulled-keeper, penalty-shot/missed/overplay, …).
+- [x] **5.3 Tennis** ✅ Cancha doubles (1400×700) con net dasheado, líneas singles, service boxes, badge de sets desde `etsc` + 17 acciones (serve, point-scored, fault, double-fault, break-points, tie-break, end-of-set, …).
+- [ ] **5.4 Volleyball**
+- [ ] **5.5 Table Tennis**
+- [ ] **5.6 Handball / Rugby / Baseball / American Football / Cricket**
 
 ### FASE 6 — Empaquetado y release
 

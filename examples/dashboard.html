@@ -104,6 +104,13 @@
           <div class="row" style="margin-top:8px">
             <label>EventId</label>
             <input id="event-id" value="123456" style="width:110px" />
+            <label>Sport</label>
+            <select id="sport">
+              <option value="1" selected>Soccer</option>
+              <option value="2">Ice Hockey</option>
+              <option value="3">Basketball</option>
+              <option value="4">Tennis</option>
+            </select>
             <button id="load">loadEvent</button>
           </div>
           <p style="color:#94a3b8;font-size:11px;margin:8px 0 0">
@@ -248,12 +255,14 @@
         if (source === 'fake') {
           fake.trigger('connect');
           fake.trigger('verified', { message: 'ok' });
+          const sportId = Number(document.getElementById('sport').value);
+          const sportNames = { 1: 'Soccer', 2: 'Ice Hockey', 3: 'Basketball', 4: 'Tennis' };
           fake.trigger('constructor', {
             message: {
-              id: 123456, en: 'Guimaraes - Rio Ave', es: 1, si: 1, sn: 'Soccer',
-              cgn: 'Primeira Liga', cn: 'Portugal',
+              id: 123456, en: 'Guimaraes - Rio Ave', es: 1, si: sportId,
+              sn: sportNames[sportId], cgn: 'Demo League', cn: 'Demo',
               th: { id: 1, name: 'Guimaraes' }, ta: { id: 2, name: 'Rio Ave' },
-              esc: '1:0', ecp: 2,
+              esc: '1:0', ecp: 2, etsc: sportId === 4 ? ['6:4', '4:6'] : ['1:0'],
               ests: {
                 CORNER: { name: 'CORNER', home: 4, away: 2 },
                 POSSESSION: { name: 'POSSESSION', home: '62', away: '38' },
@@ -271,6 +280,7 @@
 
       // Wire controls
       $source.addEventListener('change', rebuild);
+      document.getElementById('sport').addEventListener('change', rebuild);
       $brand.addEventListener('change', () => {
         const theme = themes[$brand.value] ?? {};
         lmt?.setTheme(theme);

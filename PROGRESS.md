@@ -42,3 +42,9 @@ Formato: `YYYY-MM-DD — paso X.Y — descripción`.
 - 2026-05-13 — paso 4.1 — tools/mock-ws/smoke-client.ts: cliente de verificación end-to-end (PORT=4546 ACTIONS=2 → ok).
 - 2026-05-13 — paso 4.2 — examples/dashboard.html: dashboard con tracker + panel lateral (Source switcher mock-ws/in-page fake, 14 botones de acción manual, 5 marcas blancas, log WS en streaming). Rebuild en cambio de source, setTheme en cambio de marca.
 - 2026-05-13 — paso 4.3 — README.md con integración (script tag + ESM), API table, instrucciones dual-terminal (npm run mock + npm run dev) y layout de carpetas.
+- 2026-05-13 — paso 5.1 — Basketball: court FIBA-ish (1400x750) con keys, círculos free-throw, arcos 3pt, hoops + 20 acciones (1/2/3-pts, freethrow*, foul, quarter-1..4, half-end, overtime, etc.).
+- 2026-05-13 — paso 5.2 — Ice Hockey: rink con esquinas redondeadas (1500x750), línea roja central, dos líneas azules, creases, 4 face-off circles + 16 acciones (faceoff, puck-dropped, icing, powerplay, pulled-keeper, penalty-shot*, etc.).
+- 2026-05-13 — paso 5.3 — Tennis: cancha doubles (1400x700) con net dasheado, líneas singles, service boxes + 17 acciones (serve, point-scored, fault, double-fault, break-points, tie-break, end-of-set, sets badge desde etsc, etc.).
+- 2026-05-13 — registry — getSportStage soporta si=1,2,3,4. SUPPORTED_SPORTS exportado. PitchStage ya enruta automáticamente.
+- 2026-05-13 — tests Fase 5 — 11 nuevos: registry(2) + basketball(3) + icehockey(3) + tennis(3). Total 56/56.
+- 2026-05-13 — dashboard — selector de Sport (Soccer/IceHockey/Basketball/Tennis) que rebuild + crea constructor con si correcto. UMD 27.88 KB gz.
