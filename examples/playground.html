@@ -193,17 +193,33 @@
         fake.trigger('constructor', { message: demoEvent });
       };
 
+      // Random-but-plausible ball position per action type.
+      function ballFor(action, team) {
+        const xs = team === 'away' ? 0.7 + Math.random() * 0.25 : 0.05 + Math.random() * 0.25;
+        const y = 0.2 + Math.random() * 0.6;
+        if (action === 'corner') return [team === 'away' ? 0.98 : 0.02, Math.random() > 0.5 ? 0.02 : 0.98];
+        if (action === 'goal-kick') return [team === 'away' ? 0.95 : 0.05, 0.5];
+        if (action === 'possession' || action === 'attack' || action === 'danger-attack') {
+          return [team === 'away' ? 0.4 + Math.random() * 0.5 : 0.1 + Math.random() * 0.5, y];
+        }
+        return [xs, y];
+      }
+      let secs = 4495;
       document.querySelectorAll('[data-act]').forEach((b) => {
         b.onclick = () => {
-          const [action, team] = b.dataset.act.split('-team-').length === 2
-            ? b.dataset.act.split('-team-')
-            : (() => {
-                const parts = b.dataset.act.split('-');
-                const last = parts.at(-1);
-                const isSide = last === 'home' || last === 'away';
-                return [parts.slice(0, isSide ? -1 : parts.length).join('-'), isSide ? last : 'home'];
-              })();
-          const msg = { Action: action, Team: team, Player: 'C Silva', Seconds: 4495 };
+          const parts = b.dataset.act.split('-');
+          const last = parts.at(-1);
+          const isSide = last === 'home' || last === 'away';
+          const team = isSide ? last : 'home';
+          const action = isSide ? parts.slice(0, -1).join('-') : parts.join('-');
+          secs += 7;
+          const msg = {
+            Action: action,
+            Team: team,
+            Player: 'C Silva',
+            Seconds: secs,
+            BallPosition: ballFor(action, team),
+          };
           fake.trigger('update_event', { message: msg });
         };
       });

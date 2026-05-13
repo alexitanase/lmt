@@ -1,10 +1,15 @@
 import type { Store, LMTState, TabKey } from '../core/store';
+import { VERSION } from '../core/version';
 import { PitchStage } from './PitchStage';
 import { ScoreHeader } from './ScoreHeader';
 import { StatusFooter } from './StatusFooter';
 import { TabBar } from './TabBar';
+import { LineupsTab } from './tabs/LineupsTab';
+import { PlayerStatsTab } from './tabs/PlayerStatsTab';
+import { StatsTab } from './tabs/StatsTab';
+import { TableTab } from './tabs/TableTab';
+import { TimelineTab } from './tabs/TimelineTab';
 import { themeVars } from './theme';
-import { VERSION } from '../core/version';
 
 interface Props {
   state: LMTState;
@@ -14,33 +19,20 @@ interface Props {
 function TabContent({ state }: { state: LMTState }) {
   switch (state.activeTab) {
     case 'stats':
-      return (
-        <div class="lmt-tab-content">
-          Stats llegarán en Fase 3 (mapeo de <code>ests</code>).
-        </div>
-      );
+      return <StatsTab event={state.event} />;
     case 'player-stats':
-      return (
-        <div class="lmt-tab-content">Player Stats — pendiente Fase 3.</div>
-      );
+      return <PlayerStatsTab timeline={state.timeline} />;
     case 'timeline':
-      return (
-        <div class="lmt-tab-content">
-          {state.timeline.length === 0
-            ? 'Sin acciones aún.'
-            : `${state.timeline.length} acción/es registradas (UI completa en Fase 3).`}
-        </div>
-      );
+      return <TimelineTab timeline={state.timeline} />;
     case 'lineups':
-      return <div class="lmt-tab-content">Lineups — pendiente Fase 3.</div>;
+      return <LineupsTab event={state.event} />;
     case 'table':
-      return <div class="lmt-tab-content">Table — pendiente Fase 3.</div>;
+      return <TableTab event={state.event} />;
   }
 }
 
 export function Shell({ state, store }: Props) {
   const onChange = (key: TabKey) => store.setState({ activeTab: key });
-
   return (
     <div
       class="lmt-root"
@@ -50,7 +42,11 @@ export function Shell({ state, store }: Props) {
     >
       <ScoreHeader event={state.event} />
       <TabBar active={state.activeTab} onChange={onChange} />
-      <PitchStage event={state.event} lastAction={state.lastAction} />
+      <PitchStage
+        event={state.event}
+        lastAction={state.lastAction}
+        theme={state.theme}
+      />
       <TabContent state={state} />
       <StatusFooter
         event={state.event}

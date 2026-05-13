@@ -210,32 +210,19 @@ Convención por paso:
 
 ### FASE 3 — Soccer (deporte de la captura)
 
-- [ ] **3.1 `soccer/pitch.tsx`**
-  - Campo SVG con gradas, marcas, áreas, círculo central, gradiente.
-- [ ] **3.2 `BallMarker` + `PlayerTip` compartidos**
-  - Tooltip estilo captura ("C Silva") + pelotita posicionable.
-- [ ] **3.3 Proyección `BallPosition` → coords SVG**
-  - Inversión opcional por `Team` si fuera necesario.
-- [ ] **3.4 Acciones core (lote A)**
-  - `possession`, `attack`, `danger-attack`, `kickoff`, `halftime`, `second-half`, `fulltime`, `match-ended`.
-- [ ] **3.5 Acciones de balón (lote B)**
-  - `goal`, `goal-kick`, `corner`, `throw`, `shot-on-target`, `shot-off-target`, `offside`.
-- [ ] **3.6 Acciones disciplinarias (lote C)**
-  - `yellow-card`, `red-card`, `foul`/`injury`, `injury-time`, `substitution`, `var`, `disallowed-goal`.
-- [ ] **3.7 Faltas y penaltis (lote D)**
-  - `safe-free-kick`, `danger-free-kick`, `penalty`, `penalty-shoot`, `penalty-missing`, `penalty-take`, `penalty-scored`.
-- [ ] **3.8 Tiempos extra (lote E)**
-  - `extra-time-1`, `extra-time-ht`, `extra-time-2`, `extra-time-ended`.
-- [ ] **3.9 Pestaña `Stats` con `ests`**
-  - CORNER, YELLOW_CARD, RED_CARD, POSSESSION, SHOT_ON_TARGET, SHOT_OFF_TARGET, ATTACKS, DANGER_ATTACKS, FREE_KICKS, FAULTS.
-- [ ] **3.10 Pestaña `Timeline`**
-  - Lista cronológica de las acciones recibidas (con icono + minuto + jugador).
-- [ ] **3.11 Pestaña `Lineups`**
-  - Placeholder con datos si vienen, mensaje si no.
-- [ ] **3.12 Pestaña `Table`**
-  - Placeholder con datos si vienen.
-- [ ] **3.13 Pestaña `Player Stats`**
-  - Vista por jugador a partir del timeline.
+- [x] **3.1 `soccer/pitch.tsx`** ✅ Campo SVG top-down (1050×680) con áreas, círculo, manchas, arcos, porterías y stripes.
+- [x] **3.2 `BallMarker` + `PlayerTip` compartidos** ✅ + `ActionBanner` para overlays.
+- [x] **3.3 Proyección `BallPosition` → coords SVG** ✅ con clamp y soporte string.
+- [x] **3.4 Acciones core (lote A)** ✅ possession, attack, danger-attack, kickoff, halftime, second-half, fulltime, match-ended.
+- [x] **3.5 Acciones de balón (lote B)** ✅ goal, goal-kick, corner, throw, shot-on-target, shot-off-target, offside.
+- [x] **3.6 Acciones disciplinarias (lote C)** ✅ yellow-card, red-card, injury, injury-time, substitution, var, disallowed-goal.
+- [x] **3.7 Faltas y penaltis (lote D)** ✅ safe-free-kick, danger-free-kick, penalty, penalty-shoot, penalty-take, penalty-missing, penalty-scored.
+- [x] **3.8 Tiempos extra (lote E)** ✅ extra-time-1, extra-time-ht, extra-time-2, extra-time-ended.
+- [x] **3.9 Pestaña `Stats` con `ests`** ✅ una fila por stat + barra split home/away coloreada.
+- [x] **3.10 Pestaña `Timeline`** ✅ lista reverse-chronological con MM:SS + dot color + acción + player.
+- [x] **3.11 Pestaña `Lineups`** ✅ nombres de equipos + hint.
+- [x] **3.12 Pestaña `Table`** ✅ tournament/category/status/period/score/etsc del EVENT_MODEL.
+- [x] **3.13 Pestaña `Player Stats`** ✅ agrega timeline por Player → chips por acción.
 
 ### FASE 4 — Mock server + dashboard de pruebas
 

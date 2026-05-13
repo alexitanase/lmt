@@ -170,7 +170,111 @@ export const baseStyles = `
   /* ── Generic tab content placeholders ────────────────────────── */
   .lmt-tab-content {
     padding: 14px 16px;
-    color: var(--lmt-muted);
+    color: var(--lmt-fg);
     font-size: 13px;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  /* ── Stage (SVG per-sport) ───────────────────────────────────── */
+  .lmt-pitch { padding: 0; }
+  .lmt-stage {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: #0b1220;
+  }
+
+  .lmt-ball-anim { transition: transform 0.6s ease-out; }
+  .lmt-ball-halo { fill: rgba(255,255,255,0.18); }
+  .lmt-ball-halo--home { fill: var(--lmt-home); opacity: 0.45; }
+  .lmt-ball-halo--away { fill: var(--lmt-away); opacity: 0.45; }
+
+  .lmt-tip text { paint-order: stroke; }
+
+  @keyframes lmt-banner-show {
+    0%   { opacity: 0; transform: translateY(20px) scale(0.92); }
+    10%  { opacity: 1; transform: translateY(0)    scale(1); }
+    85%  { opacity: 1; transform: translateY(0)    scale(1); }
+    100% { opacity: 0; transform: translateY(-10px) scale(1.05); }
+  }
+  .lmt-banner {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: lmt-banner-show 3.6s ease both;
+  }
+
+  /* ── Stats tab ───────────────────────────────────────────────── */
+  .lmt-stats { display: flex; flex-direction: column; gap: 10px; }
+  .lmt-stat__row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  .lmt-stat__name { color: var(--lmt-muted); }
+  .lmt-stat__val { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .lmt-stat__bar {
+    display: flex; height: 4px; border-radius: 2px; overflow: hidden;
+    margin-top: 4px; background: var(--lmt-divider);
+  }
+  .lmt-stat__bar-home { background: var(--lmt-home); }
+  .lmt-stat__bar-away { background: var(--lmt-away); }
+
+  /* ── Timeline tab ────────────────────────────────────────────── */
+  .lmt-timeline__list {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .lmt-timeline__item {
+    display: flex; gap: 8px; align-items: center;
+    padding: 4px 8px; border-left: 3px solid var(--lmt-divider);
+  }
+  .lmt-timeline__item--home { border-left-color: var(--lmt-home); }
+  .lmt-timeline__item--away { border-left-color: var(--lmt-away); }
+  .lmt-timeline__time {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--lmt-muted);
+    min-width: 42px;
+  }
+  .lmt-timeline__dot {
+    width: 8px; height: 8px; border-radius: 999px;
+    background: var(--lmt-primary);
+    flex: 0 0 8px;
+  }
+  .lmt-timeline__player { color: var(--lmt-muted); }
+
+  /* ── Lineups tab ─────────────────────────────────────────────── */
+  .lmt-lineups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lmt-lineups__team { margin: 0 0 6px; color: var(--lmt-fg); font-size: 14px; }
+  .lmt-lineups__hint { color: var(--lmt-muted); font-size: 12px; margin: 0; }
+
+  /* ── Table tab ───────────────────────────────────────────────── */
+  .lmt-table__dl {
+    display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px;
+    margin: 0;
+  }
+  .lmt-table__dl dt { color: var(--lmt-muted); font-size: 12px; }
+  .lmt-table__dl dd { margin: 0; color: var(--lmt-fg); font-size: 13px; }
+  .lmt-table__hint { color: var(--lmt-muted); font-size: 12px; margin: 8px 0 0; }
+
+  /* ── Player stats tab ────────────────────────────────────────── */
+  .lmt-player-stats ul {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .lmt-pstat {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 6px 8px; border-left: 3px solid var(--lmt-divider);
+  }
+  .lmt-pstat--home { border-left-color: var(--lmt-home); }
+  .lmt-pstat--away { border-left-color: var(--lmt-away); }
+  .lmt-pstat__name { color: var(--lmt-fg); font-size: 13px; }
+  .lmt-pstat__actions { display: flex; flex-wrap: wrap; gap: 4px; }
+  .lmt-pstat__chip {
+    font-size: 11px;
+    padding: 2px 6px;
+    border: 1px solid var(--lmt-divider);
+    border-radius: 999px;
+    color: var(--lmt-muted);
   }
 `;
