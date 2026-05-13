@@ -247,9 +247,13 @@ Convención por paso:
 - [x] **5.1 Basketball** ✅ Court FIBA-ish (1400×750) con keys, free-throw, arcos 3pt, hoops + 20 acciones (1/2/3-pts, freethrow/scored/missed, foul, quarter-1..4, half-end, overtime, …).
 - [x] **5.2 Ice Hockey** ✅ Rink con esquinas redondeadas (1500×750), red line, blue lines, creases, 4 face-off circles + 16 acciones (faceoff, puck-dropped, icing, powerplay, pulled-keeper, penalty-shot/missed/overplay, …).
 - [x] **5.3 Tennis** ✅ Cancha doubles (1400×700) con net dasheado, líneas singles, service boxes, badge de sets desde `etsc` + 17 acciones (serve, point-scored, fault, double-fault, break-points, tie-break, end-of-set, …).
-- [ ] **5.4 Volleyball**
-- [ ] **5.5 Table Tennis**
-- [ ] **5.6 Handball / Rugby / Baseball / American Football / Cricket**
+- [x] **5.4 Volleyball** ✅ Court 1800×900 con net, attack lines a 3m, service zones + 9 acciones del PDF (timeout, point-scored, fault, stat, end-of-set, rally, ?-timeout, golden-set, match-ended).
+- [x] **5.5 Table Tennis** ✅ Mesa 1500×800 + 9 acciones (serve, point-scored, end-of-{set,1st,2nd,3rd,4th,final}-set, match-ended).
+- [x] **5.6 Handball / Rugby / Baseball / American Football / Cricket** ✅ Cinco deportes con sus campos/canchas/diamond/oval y registry mínimo (acciones desconocidas → fallback `silent`).
+
+**Refactor**: `src/sports/shared/createStage.tsx` extraído. Reduce ~50 LOC por
+deporte y permite Overlays inyectables (clock para soccer, sets badge para
+tennis). Los 11 stages son ahora ~10 líneas cada uno.
 
 ### FASE 6 — Empaquetado y release
 

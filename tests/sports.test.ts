@@ -46,10 +46,20 @@ function loadSport(_host: HTMLElement, si: number, sn: string) {
 }
 
 describe('Sport registry', () => {
-  it('exposes the four implemented sports', () => {
-    expect(SUPPORTED_SPORTS.sort()).toEqual(
-      [Sports.Soccer, Sports.IceHockey, Sports.Basketball, Sports.Tennis].sort(),
-    );
+  it('exposes all 11 implemented sports', () => {
+    expect(SUPPORTED_SPORTS.sort((a, b) => a - b)).toEqual([
+      Sports.Soccer,
+      Sports.IceHockey,
+      Sports.Basketball,
+      Sports.Tennis,
+      Sports.Baseball,
+      Sports.Volleyball,
+      Sports.Rugby,
+      Sports.Handball,
+      Sports.TableTennis,
+      Sports.AmericanFootball,
+      Sports.Cricket,
+    ].sort((a, b) => a - b));
   });
   it('returns null for unsupported sport ids', () => {
     expect(getSportStage(99)).toBeNull();

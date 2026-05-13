@@ -48,3 +48,13 @@ Formato: `YYYY-MM-DD — paso X.Y — descripción`.
 - 2026-05-13 — registry — getSportStage soporta si=1,2,3,4. SUPPORTED_SPORTS exportado. PitchStage ya enruta automáticamente.
 - 2026-05-13 — tests Fase 5 — 11 nuevos: registry(2) + basketball(3) + icehockey(3) + tennis(3). Total 56/56.
 - 2026-05-13 — dashboard — selector de Sport (Soccer/IceHockey/Basketball/Tennis) que rebuild + crea constructor con si correcto. UMD 27.88 KB gz.
+- 2026-05-13 — refactor — `src/sports/shared/createStage.tsx`: helper común que reduce ~50 LOC por deporte. SoccerStage/BasketballStage/IceHockeyStage/TennisStage migrados (clock y sets como Overlays inyectables).
+- 2026-05-13 — paso 5.4 — Volleyball (si=6): court 1800x900 con net dasheada, attack lines a 3m, service zones. 9 acciones del PDF (timeout, point-scored, fault, stat, end-of-set, rally, ?-timeout, golden-set, match-ended).
+- 2026-05-13 — paso 5.5 — Table Tennis (si=10): mesa 1500x800 con net y center service line. 9 acciones (serve, point-scored, end-of-set, end-of-{1st..4th,final}-set, match-ended).
+- 2026-05-13 — paso 5.6 — Handball (si=8): court 1600x800 con arcos 6m y 9m, porterías. 11 acciones (possession, goal, shot, 7m penalty, foul, yellow/red, timeout, halftime/fulltime/match-ended).
+- 2026-05-13 — paso 5.6 — Rugby (si=7): pitch 1500x800 con try lines, 22m, halfway, postes H. 10 acciones (try, conversion, penalty, drop-goal, scrum, lineout, halftime, fulltime, match-ended).
+- 2026-05-13 — paso 5.6 — Baseball (si=5): diamond 1200x1200 con outfield, infield, mound, bases, foul lines. 9 acciones (hit, strike, ball, out, run, home-run, inning-end, match-ended).
+- 2026-05-13 — paso 5.6 — American Football (si=13): field 1600x700 con yard lines cada 10y, end zones tintadas, midfield. 9 acciones (touchdown, field-goal, fumble, interception, quarter-end, halftime/fulltime/match-ended).
+- 2026-05-13 — paso 5.6 — Cricket (si=66): oval 1400x1000 con boundary, 30y ring, pitch strip y wickets. 8 acciones (run, four, six, wicket, over-end, innings, match-ended).
+- 2026-05-13 — registry — 11 deportes registrados (Soccer/IceHockey/Basketball/Tennis/Baseball/Volleyball/Rugby/Handball/TableTennis/AmericanFootball/Cricket). dashboard.html con selector completo.
+- 2026-05-13 — tests Fase 5 cierre — sports-extra.test.ts: 21 tests parametrizados (3 por deporte × 7 deportes). Total 77/77. UMD 30.19 KB gz.

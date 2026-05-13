@@ -110,6 +110,13 @@
               <option value="2">Ice Hockey</option>
               <option value="3">Basketball</option>
               <option value="4">Tennis</option>
+              <option value="5">Baseball</option>
+              <option value="6">Volleyball</option>
+              <option value="7">Rugby</option>
+              <option value="8">Handball</option>
+              <option value="10">Table Tennis</option>
+              <option value="13">American Football</option>
+              <option value="66">Cricket</option>
             </select>
             <button id="load">loadEvent</button>
           </div>
@@ -256,7 +263,11 @@
           fake.trigger('connect');
           fake.trigger('verified', { message: 'ok' });
           const sportId = Number(document.getElementById('sport').value);
-          const sportNames = { 1: 'Soccer', 2: 'Ice Hockey', 3: 'Basketball', 4: 'Tennis' };
+          const sportNames = {
+            1: 'Soccer', 2: 'Ice Hockey', 3: 'Basketball', 4: 'Tennis',
+            5: 'Baseball', 6: 'Volleyball', 7: 'Rugby', 8: 'Handball',
+            10: 'Table Tennis', 13: 'American Football', 66: 'Cricket',
+          };
           fake.trigger('constructor', {
             message: {
               id: 123456, en: 'Guimaraes - Rio Ave', es: 1, si: sportId,
