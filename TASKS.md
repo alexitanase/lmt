@@ -176,22 +176,22 @@ Convención por paso:
 
 ### FASE 1 — Núcleo de conectividad y API pública
 
-- [ ] **1.1 Tipos del WS**
+- [x] **1.1 Tipos del WS** ✅
   - `src/core/types.ts`: `EventModel`, `ActionModel`, `LMTConfig`, `Theme`, enums de Sport/Status.
-- [ ] **1.2 `SocketClient`**
-  - Conexión a Socket.IO con reconexión + backoff; cola mientras desconectado.
-  - Métodos: `verifyClient(partner)`, `clientReady(eventId)`, `on(type, cb)`.
-- [ ] **1.3 `Controller`**
+- [x] **1.2 `SocketClient`** ✅
+  - Conexión a Socket.IO con reconexión + backoff; listeners persisten en reconexión.
+  - Métodos: `verifyClient(partner)`, `clientReady(eventId)`, `getEventDetails`, `getEventH2H`, `on`/`off`.
+- [x] **1.3 `Controller`** ✅
   - Orquesta: `connect → verify_client → verified(ok) → client_ready → constructor → update_event loop`.
   - Re-emit en cambio de evento sin re-verificar.
-- [ ] **1.4 `Store`**
-  - Estado: `event`, `lastAction`, `connection`, `tab`.
-  - Subscripción reactiva (señal/observable mínimo, sin dependencia externa).
-- [ ] **1.5 API pública `LMT.create`**
-  - `loadEvent`, `on`, `off`, `setTheme`, `destroy`.
-  - Validación de `partner` (obligatorio) y `container`.
-- [ ] **1.6 Tests del controller con mock socket**
-  - Aceptación: el ciclo completo funciona contra un socket fake.
+- [x] **1.4 `Store`** ✅
+  - Estado: `connection`, `partner`, `theme`, `event`, `lastAction`, `timeline`, `activeTab`.
+  - `subscribe`, `setState`, `patchTheme`, `applyAction` (tope 200 timeline).
+- [x] **1.5 API pública `LMT.create`** ✅
+  - `loadEvent`, `on`, `off`, `setTheme`, `getState`, `destroy`.
+  - Validación de `partner` y `container` obligatorios.
+- [x] **1.6 Tests del controller con mock socket** ✅
+  - 20 tests verdes (store 6 + events 3 + controller 6 + smoke 5).
 
 ### FASE 2 — Shell visual + theming
 
